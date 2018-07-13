@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import firebase from 'firebase';
 
 import './App.css';
 
 import AllStuff from '../components/AllStuff/AllStuff';
-// import FullStuff from '../components/FullStuff/FullStuff';
+import FullStuff from '../components/FullStuff/FullStuff';
 import Login from '../components/Login/Login';
-// import MyStuff from '../components/MyStuff/MyStuff';
+import MyStuff from '../components/MyStuff/MyStuff';
 import Register from '../components/Register/Register';
 import Home from '../components/Home/Home';
 
@@ -53,6 +54,25 @@ class App extends Component {
   state = {
     authed: false,
   }
+
+  componentDidMount () {
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({authed: true});
+      } else {
+        this.setState({authed: false});
+    }
+  });
+  }
+
+  componentWillUnmount() {
+    this.removeListener();
+  }
+
+  runAway = () => {
+    this.setState({authed: false});
+  }
+
   render() {
     return (
       <div className="App">
@@ -63,7 +83,10 @@ class App extends Component {
         <Register /> */}
         <BrowserRouter>
           <div>
-            <Navbar />
+            <Navbar 
+            authed={this.state.authed}
+            runAway={this.runAway}
+            />
             <div className="container">
               <div className="row">
                 <Switch>
@@ -83,6 +106,17 @@ class App extends Component {
                     authed={this.state.authed}
                     component={Login}
                   />
+                  <PrivateRoute
+                    path="/mystuff"
+                    authed={this.state.authed}
+                    component={MyStuff}
+                  />
+                    <PrivateRoute
+                    path="/fullstuff/:id"
+                    authed={this.state.authed}
+                    component={FullStuff}
+                  />
+                                    
                 </Switch>
               </div>
             </div>
