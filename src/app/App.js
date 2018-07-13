@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
 
+import './App.css';
+
 import AllStuff from '../components/AllStuff/AllStuff';
 // import FullStuff from '../components/FullStuff/FullStuff';
-// import Login from '../components/Login/Login';
+import Login from '../components/Login/Login';
 // import MyStuff from '../components/MyStuff/MyStuff';
 import Register from '../components/Register/Register';
 import Home from '../components/Home/Home';
 
 import Navbar from '../components/Navbar/Navbar';
+import fbConnection from '../firebaseRequests/connection';
+fbConnection();
 
-import './App.css';
 
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
   return (
@@ -74,6 +77,11 @@ class App extends Component {
                     path="/register"
                     authed={this.state.authed}
                     component={Register}
+                  />
+                    <PublicRoute
+                    path="/login"
+                    authed={this.state.authed}
+                    component={Login}
                   />
                 </Switch>
               </div>
