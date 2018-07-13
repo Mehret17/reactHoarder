@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
 
-// import AllStuff from '../components/AllStuff/AllStuff';
+import AllStuff from '../components/AllStuff/AllStuff';
 // import FullStuff from '../components/FullStuff/FullStuff';
 // import Login from '../components/Login/Login';
 // import MyStuff from '../components/MyStuff/MyStuff';
@@ -12,7 +12,27 @@ import Navbar from '../components/Navbar/Navbar';
 
 import './App.css';
 
+const PrivateRoute = ({ component: Component, authed, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        authed === true ? (
+          <Component {...props} />
+        ) : (
+            <Redirect
+              to={{ pathname: '/login', state: { from: props.location } }}
+            />
+          )
+      }
+    />
+  );
+};
+
 class App extends Component {
+  state = {
+    authed: false,
+  }
   render() {
     return (
       <div className="App">
@@ -28,6 +48,11 @@ class App extends Component {
               <div className="row">
                 <Switch>
                   <Route path="/" exact component={Home} />
+                  <PrivateRoute
+                    path="/allStuff"
+                    authed={this.state.authed}
+                    component={AllStuff}
+                  />
                 </Switch>
               </div>
             </div>
