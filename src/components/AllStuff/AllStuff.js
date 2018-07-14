@@ -21,7 +21,14 @@ class AllStuff extends React.Component {
   render () {
     const allstuffComponents = this.state.allStuffs.map((allStuff) => {
       return (
-        <h2>{allStuff.itemName}</h2>
+        <div key={allStuff.id} className="col-sm-3 itemsCard">
+        <div className ="thumbnail">
+        <img className="itemImage"src={allStuff.itemImage} alt=""/>
+        <h3>{allStuff.itemName}</h3>
+        <p>{allStuff.itemDescription}</p>
+        <button className="btn btn-primary">Add Me</button>
+        </div>
+        </div>
       );
     });
     return (
