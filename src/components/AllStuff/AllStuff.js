@@ -2,8 +2,8 @@ import React from 'react';
 
 import allStuffRequests from '../../firebaseRequests/allstuff';
 import AllStuffItem from '../AllStuffItem/AllStuffItem';
-// import authRequests from '../../firebaseRequests/auth';
-// import myStuffRequests from '../../firebaseRequests/mystuffs'
+import authRequests from '../../firebaseRequests/auth';
+import myStuffRequests from '../../firebaseRequests/mystuffs'
 
 import './AllStuff.css';
 
@@ -12,23 +12,26 @@ import './AllStuff.css';
 class AllStuff extends React.Component {
   state = {
     allStuffs : [],
-    // myStuff: {},
+    myStuff: {},
   }
   
   
-  // saveStuff = () => {
-  //   // const newOrder = {...this.state.myStuff}
-  //   const newStuff = {...this.state.allStuff};
-  //   newStuff.id = authRequests.getUid();
-  //   myStuffRequests
-  //     .postRequest(newStuff)
-  //     .then(() => {
-  //       this.props.history.push('/mystuff');
-  //     })
-  //     .catch((err) => {
-  //       console.error('error in mystuff post', err);
-  //     });
-  // }
+  saveStuff = (allStuff) => {
+    // const newOrder = {...this.state.myStuff}
+    const newStuff = {...this.state.myStuff};
+    newStuff.itemName = allStuff.itemName;
+    newStuff.itemImage = allStuff.itemImage;
+    newStuff.itemDescription = allStuff.itemDescription;
+    newStuff.uid = authRequests.getUid();
+    myStuffRequests
+      .postRequest(newStuff)
+      .then(() => {
+        this.props.history.push('/mystuff');
+      })
+      .catch((err) => {
+        console.error('error in mystuff post', err);
+      });
+  }
 
   componentDidMount () {
     allStuffRequests
@@ -52,6 +55,7 @@ class AllStuff extends React.Component {
         <AllStuffItem
          key={allStuff.id}
          details={allStuff}
+         saveStuff={this.saveStuff}
         />
       );
     });
